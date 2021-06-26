@@ -1,6 +1,7 @@
 package co.com.ajac.infrastructure.commands;
 
 import co.com.ajac.infrastructure.api.commands.CommandProvider;
+import co.com.ajac.infrastructure.api.commands.ProviderManager;
 import co.com.ajac.infrastructure.api.events.EventPublisher;
 import io.vavr.collection.List;
 import org.springframework.beans.factory.annotation.Autowired;
