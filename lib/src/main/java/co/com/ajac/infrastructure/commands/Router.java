@@ -10,6 +10,6 @@ public class Router {
 
     @Bean
     public RouterFunction<ServerResponse> route(Routes routes, SpringProcessor springProcessor) {
-        return routes.endpoints();
+        return routes.endpoints(springProcessor::execute);
     }
 }
