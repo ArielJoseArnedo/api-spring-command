@@ -1,8 +1,8 @@
 package co.com.ajac.infrastructure.commands;
 
+import co.com.ajac.base.events.Publisher;
 import co.com.ajac.infrastructure.api.commands.CommandProvider;
 import co.com.ajac.infrastructure.api.commands.ProviderManager;
-import co.com.ajac.infrastructure.api.events.EventPublisher;
 import io.vavr.collection.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 public class CommandProcessor implements SpringProcessor {
 
     private final ProviderManager providerManager;
-    private final EventPublisher eventPublisher;
+    private final Publisher publisher;
 
     @Autowired
-    public CommandProcessor(ProviderManager providerManager, EventPublisher eventPublisher) {
+    public CommandProcessor(ProviderManager providerManager, Publisher publisher) {
         this.providerManager = providerManager;
-        this.eventPublisher = eventPublisher;
+        this.publisher = publisher;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class CommandProcessor implements SpringProcessor {
     }
 
     @Override
-    public EventPublisher eventPublisher() {
-        return eventPublisher;
+    public Publisher publisher() {
+        return publisher;
     }
 }
