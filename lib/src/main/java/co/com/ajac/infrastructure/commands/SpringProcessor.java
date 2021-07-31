@@ -1,9 +1,9 @@
 package co.com.ajac.infrastructure.commands;
 
+import co.com.ajac.base.errors.AppError;
+import co.com.ajac.base.events.Event;
 import co.com.ajac.concurrency.FutureEither;
-import co.com.ajac.domain.errors.AppError;
 import co.com.ajac.infrastructure.api.commands.*;
-import co.com.ajac.infrastructure.api.events.Event;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.Function2;
 import io.vavr.Tuple;
@@ -58,7 +58,7 @@ public interface SpringProcessor extends Processor, CommandUtil {
 
     default Mono<ServerResponse> toExecuteCommandAndRequest(FutureEither<AppError, Tuple2<Command, Request>> commandAndRequest) {
         return Mono.fromFuture(commandAndRequest
-          .flatMap(commandRequestTuple2 -> commandRequestTuple2._1().execute(commandRequestTuple2._2()))
+          .flatMap(commandRequestTuple2 -> (FutureEither<AppError, Tuple2<Option<Response>, List<Event>>>) commandRequestTuple2._1().execute(commandRequestTuple2._2()))
           .getValue()
           .toCompletableFuture())
           .flatMap(this::onSuccess)
@@ -71,7 +71,7 @@ public interface SpringProcessor extends Processor, CommandUtil {
             this::responseError,
             response -> {
                 Future.of(() ->
-                  eventPublisher().publish(response._2)
+                  publisher().publish(response._2)
                 );
                 return response._1()
                   .map(commandResponse -> ServerResponse.ok()

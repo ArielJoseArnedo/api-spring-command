@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-version = '1.3.0'
+version = '2.0.0'
 
 repositories {
     mavenCentral()
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api 'com.gitlab.ArielJose55:api-command:2.0.0'
+    api 'com.gitlab.ArielJose55:api-command:3.0.0'
     implementation 'org.springframework:spring-webflux:5.3.8'
     implementation  'org.springframework:spring-context:5.3.8'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
