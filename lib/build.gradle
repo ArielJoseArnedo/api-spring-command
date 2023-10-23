@@ -2,7 +2,13 @@ plugins {
     id 'java-library'
 }
 
-version = '2.1.0'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+version = '3.2.0'
 
 repositories {
     mavenCentral()
@@ -10,20 +16,20 @@ repositories {
 }
 
 dependencies {
-    api 'com.github.ArielJoseArnedo:api-command:3.1.1'
-    implementation 'org.springframework:spring-webflux:5.3.8'
-    implementation  'org.springframework:spring-context:5.3.8'
+    api 'com.github.ArielJoseArnedo:api-command:3.2.0'
+    implementation 'org.springframework:spring-webflux:6.0.12'
+    implementation  'org.springframework:spring-context:6.0.12'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-tasks.named('jar') {
+jar {
     manifest {
-        attributes("Implementation-Title": project.name,
-                "Implementation-Version": version)
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

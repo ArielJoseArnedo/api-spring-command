@@ -1,7 +1,7 @@
 package co.com.ajac.infrastructure.commands;
 
 import co.com.ajac.base.errors.AppError;
-import co.com.ajac.base.events.Event;
+import co.com.ajac.messaging.events.Event;
 import co.com.ajac.concurrency.FutureEither;
 import co.com.ajac.infrastructure.api.commands.*;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -56,6 +56,7 @@ public interface SpringProcessor extends Processor, CommandUtil {
         return function3.apply(pathUrlOpt, body);
     }
 
+    @SuppressWarnings("unchecked")
     default Mono<ServerResponse> toExecuteCommandAndRequest(FutureEither<AppError, Tuple2<Command, Request>> commandAndRequest) {
         return Mono.fromFuture(commandAndRequest
           .flatMap(commandRequestTuple2 -> (FutureEither<AppError, Tuple2<Option<Response>, List<Event>>>) commandRequestTuple2._1().execute(commandRequestTuple2._2()))
@@ -65,6 +66,7 @@ public interface SpringProcessor extends Processor, CommandUtil {
           .onErrorResume(t -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("Unexpected error has occurred"));
     }
 
+    @SuppressWarnings("unchecked")
     default Mono<ServerResponse> onSuccess(Either<AppError, Tuple2<Option<Response>, List<Event>>> resultEither) {
         return resultEither
           .fold(
