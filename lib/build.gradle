@@ -8,7 +8,7 @@ java {
     }
 }
 
-version = '3.2.0'
+version = '3.4.0'
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    api 'com.github.ArielJoseArnedo:api-command:3.2.0'
+    api 'com.github.ArielJoseArnedo:api-command:3.4.0'
     implementation 'org.springframework:spring-webflux:6.0.12'
     implementation  'org.springframework:spring-context:6.0.12'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
