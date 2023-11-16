@@ -3,7 +3,10 @@ package co.com.ajac.infrastructure.commands;
 import co.com.ajac.base.errors.AppError;
 import co.com.ajac.messaging.events.Event;
 import co.com.ajac.concurrency.FutureEither;
-import co.com.ajac.infrastructure.api.commands.*;
+import co.com.ajac.infrastructure.api.processors.Processor;
+import co.com.ajac.infrastructure.api.commands.Command;
+import co.com.ajac.infrastructure.api.commands.Request;
+import co.com.ajac.infrastructure.api.commands.Response;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.Function2;
 import io.vavr.Tuple;
@@ -20,7 +23,7 @@ import reactor.core.publisher.Mono;
 
 import static co.com.ajac.infrastructure.api.util.StgMonad.getOption;
 
-public interface SpringProcessor extends Processor, CommandUtil {
+public interface SpringProcessor extends Processor {
 
     default Mono<ServerResponse> execute(ServerRequest request) {
         return toExecuteCommandAndRequest(findCommandAndRequest(request));
@@ -28,7 +31,7 @@ public interface SpringProcessor extends Processor, CommandUtil {
 
     default FutureEither<AppError, Tuple2<Command, Request>> findCommandAndRequest(ServerRequest request) {
         return processRequest((Option<String> pathUrlOpt, Future<JsonNode> commandBodyFuture) ->
-            findProvider(pathUrlOpt, commandProviders())
+            findController(pathUrlOpt, controllerProviders())
               .flatMap(commandProvider -> proccessBody(commandBodyFuture)
                 .flatMap(tuple2 -> findCommand(tuple2._1(), commandProvider)
                   .flatMap(command -> findRequest(tuple2._1(), tuple2._2(), commandProvider)
